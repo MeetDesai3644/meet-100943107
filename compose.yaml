@@ -1,0 +1,32 @@
+services:
+  node-app:
+    image: meetdesai3644/node-app
+    ports:
+      - "3000:3000"
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: meet100943107
+      POSTGRES_DB: labonedb
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres
+    user: postgres
+    environment:
+      POSTGRES_DB: labonedb
+      POSTGRES_PASSWORD: meet100943107
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  db-data:
